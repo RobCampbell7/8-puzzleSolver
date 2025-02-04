@@ -30,6 +30,7 @@ if __name__=="__main__":
 
     if solvable(start, goal):
         solution = solve(start, goal)
+        input("Solving complete - press enter to view solution...")
         for state in solution.path():
             os.system("cls")
             printState(state)
