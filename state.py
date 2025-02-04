@@ -21,6 +21,9 @@ class State:
         newState.setDepth(self.g + 1)
         return newState
     
+    def equals(self, otherState):
+        return self.state == otherState
+    
     def path(self):
         if self.prevState == None:
             return self.state
