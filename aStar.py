@@ -104,7 +104,7 @@ def possibleStates(state):
             ]
 
 def heuristic(current, goal):
-    
+    return 6
 
 def solve(start, goal):
     current = State(start)
