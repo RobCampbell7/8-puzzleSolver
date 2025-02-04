@@ -11,19 +11,20 @@ neighbours = {
 }    
 
 class State:
-    def __init__(self, state):
+    def __init__(self, state, heuristic):
         self.prevState = None
         self.state = state
         self.f = 0
         self.g = 0
         self.h = heuristic(state)
+        self.heuristic = heuristic
 
     def setDepth(self, g):
         self.g = g
         self.f = self.g + self.h
 
     def createChild(self, newState):
-        newState = State(newState)
+        newState = State(newState, self.heuristic)
         newState.prevState = self
         newState.setDepth(self.g + 1)
         return newState
@@ -33,9 +34,12 @@ class State:
     
     def path(self):
         if self.prevState == None:
-            return self.state
+            return [self.state]
         else:
-            return self.prevState.path() + self.state
+            return self.prevState.path() + [self.state]
+    
+    def __repr__(self):
+        return str(self.state)
 
 def swap(lst, i, j):
     temp = []
@@ -47,7 +51,7 @@ def swap(lst, i, j):
         else:
             temp.append(lst[k])
     
-    return tuple(lst)
+    return tuple(temp)
 
 def possibleStates(state):
     match state.index(0):
@@ -103,8 +107,52 @@ def possibleStates(state):
                 swap(state, 8, 7)
             ]
 
+def inversionCount(state):
+    invCount = 0
+    for i in range(9):
+        for j in range(9):
+            if state[i] != 0 and state[j] != 0 and state[i] > state[j]:
+                invCount += 1
+    return invCount
+
+def solvable(start, goal):
+    if inversionCount(start) % 2 == inversionCount(goal) % 2:
+        return True
+    else:
+        return False
+
+def manhattan(i, j):
+    """
+    Returns the manhattan distances between two indexes i and j in the grid:
+    0 1 2
+    3 4 5
+    6 7 8
+    """
+    return abs((i % 3) + (j % 3)) + abs((i // 3) + (j // 3))
+    # dx = abs((i % 3) + (j % 3))
+    # dy = abs((i // 3) + (j // 3))
+    # return dx + dy
+
 def heuristic(current, goal):
-    return 6
+    score = 0
+    for i in current:
+        score += manhattan(i, goal.index(i))
+    return score
+
+def insert(sLst, s):
+    for i in range(len(sLst)):
+        if sLst[i].f > s.f:
+            sLst = sLst[:i - 1] + [s] + sLst[i:]
+    sLst.append(s)
 
 def solve(start, goal):
-    current = State(start)
+    current = State(start, lambda s : heuristic(s, goal))
+    frontier = []
+    while current.equals(goal) != True:
+        for state in possibleStates(current.state):
+            frontier.append(current.createChild(state))
+        
+        frontier.sort(key=lambda s : s.f)
+        current = frontier.pop(0)
+
+    return current
