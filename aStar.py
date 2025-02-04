@@ -1,5 +1,3 @@
-from state import State
-
 neighbours = {
     0 : (1, 3),
     1 : (0, 2, 4),
@@ -11,6 +9,33 @@ neighbours = {
     7 : (4, 6, 8),
     8 : (5, 7)
 }    
+
+class State:
+    def __init__(self, state):
+        self.prevState = None
+        self.state = state
+        self.f = 0
+        self.g = 0
+        self.h = heuristic(state)
+
+    def setDepth(self, g):
+        self.g = g
+        self.f = self.g + self.h
+
+    def createChild(self, newState):
+        newState = State(newState)
+        newState.prevState = self
+        newState.setDepth(self.g + 1)
+        return newState
+    
+    def equals(self, otherState):
+        return self.state == otherState
+    
+    def path(self):
+        if self.prevState == None:
+            return self.state
+        else:
+            return self.prevState.path() + self.state
 
 def swap(lst, i, j):
     temp = []
@@ -77,6 +102,9 @@ def possibleStates(state):
                 swap(state, 8, 5),
                 swap(state, 8, 7)
             ]
+
+def heuristic(current, goal):
+    
 
 def solve(start, goal):
     current = State(start)

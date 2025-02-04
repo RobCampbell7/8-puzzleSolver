@@ -1,5 +1,5 @@
 import random
-
+from aStar import 
 def heuristicPH(x):
     return random.randint(0, 100)
 
