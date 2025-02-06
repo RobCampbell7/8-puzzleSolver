@@ -24,7 +24,7 @@ class State:
 
     def setDepth(self, g):
         self.g = g
-        self.f = self.g + self.h
+        self.f = self.g + 2*self.h
 
     def createChild(self, newState):
         newState = State(newState, self.heuristic)
