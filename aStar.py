@@ -113,7 +113,7 @@ def possibleStates(state):
 def inversionCount(state):
     invCount = 0
     for i in range(9):
-        for j in range(9):
+        for j in range(i + 1, 9):
             if state[i] != 0 and state[j] != 0 and state[i] > state[j]:
                 invCount += 1
     return invCount
@@ -172,7 +172,7 @@ def solve(start, goal):
     while current.equals(goal) != True:
         os.system("cls")
         printState(current.state)
-        print("\n f:{0:>2} - g:{1:>2} - h:{2:>2}".format(current.f, current.g, current.h))
+        print("\nf:{0:>2} - g:{1:>2} - h:{2:>2}".format(current.f, current.g, current.h))
         for state in possibleStates(current.state):
             if state not in exploredStates:
                 frontier = insert(frontier, current.createChild(state))
@@ -182,6 +182,6 @@ def solve(start, goal):
 
     os.system("cls")
     printState(current.state)
-    print("\n f:{0:>2} - g:{1:>2} - h:{2:>2}".format(current.f, current.g, current.h))
+    print("\nf:{0:>2} - g:{1:>2} - h:{2:>2}".format(current.f, current.g, current.h))
         
     return current
