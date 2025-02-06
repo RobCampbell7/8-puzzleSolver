@@ -19,7 +19,7 @@ class State:
         self.state = state
         self.f = 0
         self.g = 0
-        self.h = 2 * heuristic(state)
+        self.h = heuristic(state)
         self.heuristic = heuristic
 
     def setDepth(self, g):
@@ -124,6 +124,7 @@ def solvable(start, goal):
     else:
         return False
 
+@cache
 def manhattan(i, j):
     """
     Returns the manhattan distances between two indexes i and j in the grid:
@@ -150,7 +151,7 @@ def insert(sLst, s):
     return sLst + [s]
 
 def printState(state):
-    output = ""
+    output = " "
     for i in range(9):
         if state[i] == 0:
             output += " "
@@ -158,7 +159,7 @@ def printState(state):
             output += str(state[i])
 
         if i == 2 or i == 5:
-            output += "\n"
+            output += "\n "
         else:
             output += " "
         
@@ -171,19 +172,16 @@ def solve(start, goal):
     while current.equals(goal) != True:
         os.system("cls")
         printState(current.state)
-        print("\nf:{0} - g:{1} - h:{2}".format(current.f, current.g, current.h))
+        print("\n f:{0:>2} - g:{1:>2} - h:{2:>2}".format(current.f, current.g, current.h))
         for state in possibleStates(current.state):
             if state not in exploredStates:
                 frontier = insert(frontier, current.createChild(state))
-            # print(state)
-            # else:
-            #     print("FUCK")
-            #     input()
-        # print(frontier)
-        # input()
-        
-        # frontier.sort(key=lambda s : s.f)
+
         current = frontier.pop(0)
         exploredStates.append(current.state)
 
+    os.system("cls")
+    printState(current.state)
+    print("\n f:{0:>2} - g:{1:>2} - h:{2:>2}".format(current.f, current.g, current.h))
+        
     return current
