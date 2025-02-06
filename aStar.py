@@ -24,7 +24,7 @@ class State:
 
     def setDepth(self, g):
         self.g = g
-        self.f = self.g + 2*self.h
+        self.f = self.g + self.h
 
     def createChild(self, newState):
         newState = State(newState, self.heuristic)
@@ -173,7 +173,8 @@ def solve(start, goal):
         printState(current.state)
         print("\nf:{0} - g:{1} - h:{2}".format(current.f, current.g, current.h))
         for state in possibleStates(current.state):
-            frontier = insert(frontier, current.createChild(state))
+            if state not in exploredStates:
+                frontier = insert(frontier, current.createChild(state))
             # print(state)
             # else:
             #     print("FUCK")
