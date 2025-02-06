@@ -1,3 +1,6 @@
+from functools import cache
+import os
+
 neighbours = {
     0 : (1, 3),
     1 : (0, 2, 4),
@@ -16,7 +19,7 @@ class State:
         self.state = state
         self.f = 0
         self.g = 0
-        self.h = heuristic(state)
+        self.h = 2 * heuristic(state)
         self.heuristic = heuristic
 
     def setDepth(self, g):
@@ -128,31 +131,58 @@ def manhattan(i, j):
     3 4 5
     6 7 8
     """
-    return abs((i % 3) + (j % 3)) + abs((i // 3) + (j // 3))
+    return abs((i % 3) - (j % 3)) + abs((i // 3) - (j // 3))
     # dx = abs((i % 3) + (j % 3))
     # dy = abs((i // 3) + (j // 3))
     # return dx + dy
 
+@cache
 def heuristic(current, goal):
     score = 0
-    for i in current:
-        score += manhattan(i, goal.index(i))
+    for i in range(9):
+        score += manhattan(current.index(i), goal.index(i))
     return score
 
 def insert(sLst, s):
     for i in range(len(sLst)):
         if sLst[i].f > s.f:
-            sLst = sLst[:i - 1] + [s] + sLst[i:]
-    sLst.append(s)
+            return sLst[:i] + [s] + sLst[i:]
+    return sLst + [s]
+
+def printState(state):
+    output = ""
+    for i in range(9):
+        if state[i] == 0:
+            output += " "
+        else:
+            output += str(state[i])
+
+        if i == 2 or i == 5:
+            output += "\n"
+        else:
+            output += " "
+        
+    print(output)
 
 def solve(start, goal):
     current = State(start, lambda s : heuristic(s, goal))
     frontier = []
+    exploredStates = []
     while current.equals(goal) != True:
+        os.system("cls")
+        printState(current.state)
+        print("\nf:{0} - g:{1} - h:{2}".format(current.f, current.g, current.h))
         for state in possibleStates(current.state):
-            frontier.append(current.createChild(state))
+            frontier = insert(frontier, current.createChild(state))
+            # print(state)
+            # else:
+            #     print("FUCK")
+            #     input()
+        # print(frontier)
+        # input()
         
-        frontier.sort(key=lambda s : s.f)
+        # frontier.sort(key=lambda s : s.f)
         current = frontier.pop(0)
+        exploredStates.append(current.state)
 
     return current
