@@ -114,6 +114,7 @@ def possibleStates(state):
     i = state.index(0)
     return [swap(state, i, j) for j in neighbours[i]]
 
+@cache
 def inversionCount(state):
     invCount = 0
     for i in range(9):
@@ -141,12 +142,19 @@ def manhattan(i, j):
     # dy = abs((i // 3) + (j // 3))
     # return dx + dy
 
+# @cache
+# def heuristic(current, goal):
+#     score = 0
+#     for i in range(9):
+#         score += manhattan(current.index(i), goal.index(i))
+#     return score
+
 @cache
 def heuristic(current, goal):
-    score = 0
-    for i in range(9):
-        score += manhattan(current.index(i), goal.index(i))
-    return score
+    return abs(inversionCount(current) - inversionCount(goal))
+
+def heuristic(current, goal):
+    return 0
 
 def insert(sLst, s):
     for i in range(len(sLst)):
