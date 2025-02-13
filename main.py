@@ -18,10 +18,15 @@ def printState(state):
     print(output)
 
 if __name__=="__main__":
+    # start = (
+    #     0, 8, 7,
+    #     6, 5, 4,
+    #     3, 2, 1
+    # )
     start = (
-        0, 8, 7,
-        6, 5, 4,
-        3, 2, 1
+        7, 2, 4,
+        5, 0, 6,
+        8, 3, 1
     )
     goal = (
         0, 1, 2,

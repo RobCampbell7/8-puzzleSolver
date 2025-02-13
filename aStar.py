@@ -56,59 +56,63 @@ def swap(lst, i, j):
     
     return tuple(temp)
 
+# @cache
+# def possibleStates(state):
+#     match state.index(0):
+#         case 0:
+#             return [
+#                 swap(state, 0, 1),
+#                 swap(state, 0, 3)
+#             ]
+#         case 1:
+#             return [
+#                 swap(state, 1, 0),
+#                 swap(state, 1, 2),
+#                 swap(state, 1, 4)
+#             ]
+#         case 2:
+#             return [
+#                 swap(state, 2, 1),
+#                 swap(state, 2, 5)
+#             ]
+#         case 3:
+#             return [
+#                 swap(state, 3, 0),
+#                 swap(state, 3, 4),
+#                 swap(state, 3, 6)
+#             ]
+#         case 4:
+#             return [
+#                 swap(state, 4, 1),
+#                 swap(state, 4, 3),
+#                 swap(state, 4, 5),
+#                 swap(state, 4, 7)
+#             ]
+#         case 5:
+#             return [
+#                 swap(state, 5, 2),
+#                 swap(state, 5, 4),
+#                 swap(state, 5, 8)
+#             ]
+#         case 6:
+#             return [
+#                 swap(state, 6, 3),
+#                 swap(state, 6, 7)
+#             ]
+#         case 7:
+#             return [
+#                 swap(state, 7, 4),
+#                 swap(state, 7, 6),
+#                 swap(state, 7, 8)
+#             ]
+#         case 8:
+#             return [
+#                 swap(state, 8, 5),
+#                 swap(state, 8, 7)
+#             ]
 def possibleStates(state):
-    match state.index(0):
-        case 0:
-            return [
-                swap(state, 0, 1),
-                swap(state, 0, 3)
-            ]
-        case 1:
-            return [
-                swap(state, 1, 0),
-                swap(state, 1, 2),
-                swap(state, 1, 4)
-            ]
-        case 2:
-            return [
-                swap(state, 2, 1),
-                swap(state, 2, 5)
-            ]
-        case 3:
-            return [
-                swap(state, 3, 0),
-                swap(state, 3, 4),
-                swap(state, 3, 6)
-            ]
-        case 4:
-            return [
-                swap(state, 4, 1),
-                swap(state, 4, 3),
-                swap(state, 4, 5),
-                swap(state, 4, 7)
-            ]
-        case 5:
-            return [
-                swap(state, 5, 2),
-                swap(state, 5, 4),
-                swap(state, 5, 8)
-            ]
-        case 6:
-            return [
-                swap(state, 6, 3),
-                swap(state, 6, 7)
-            ]
-        case 7:
-            return [
-                swap(state, 7, 4),
-                swap(state, 7, 6),
-                swap(state, 7, 8)
-            ]
-        case 8:
-            return [
-                swap(state, 8, 5),
-                swap(state, 8, 7)
-            ]
+    i = state.index(0)
+    return [swap(state, i, j) for j in neighbours[i]]
 
 def inversionCount(state):
     invCount = 0
@@ -170,9 +174,9 @@ def solve(start, goal):
     frontier = []
     exploredStates = []
     while current.equals(goal) != True:
-        os.system("cls")
-        printState(current.state)
-        print("\nf:{0:>2} - g:{1:>2} - h:{2:>2}".format(current.f, current.g, current.h))
+        # os.system("cls")
+        # printState(current.state)
+        # print("\nf:{0:>2} - g:{1:>2} - h:{2:>2}".format(current.f, current.g, current.h))
         for state in possibleStates(current.state):
             if state not in exploredStates:
                 frontier = insert(frontier, current.createChild(state))
