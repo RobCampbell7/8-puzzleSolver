@@ -1,16 +1,29 @@
 from functools import cache
 import os
 
+goal = (
+         0,  1,  2,  3, 
+         4,  5,  6,  7,
+         8,  9, 10, 11,
+        12, 13, 14, 15
+    )
 neighbours = {
-    0 : (1, 3),
-    1 : (0, 2, 4),
-    2 : (1, 5),
-    3 : (0, 4, 6),
-    4 : (1, 3, 5, 7),
-    5 : (2, 4, 8),
-    6 : (3, 7),
-    7 : (4, 6, 8),
-    8 : (5, 7)
+     0 : (1, 4),
+     1 : (0, 2, 5),
+     2 : (1, 3, 6),
+     3 : (2, 7),
+     4 : (0, 5, 8),
+     5 : (1, 4, 6, 9),
+     6 : (2, 5, 7, 10),
+     7 : (3, 6, 11),
+     8 : (4, 9, 12),
+     9 : (5, 8, 10, 13),
+    10 : (6, 9, 11, 14),
+    11 : (7, 10, 15),
+    12 : (8, 13),
+    13 : (9, 12, 14),
+    14 : (10, 13, 15),
+    15 : (11, 14)
 }    
 
 class State:
@@ -56,60 +69,6 @@ def swap(lst, i, j):
     
     return tuple(temp)
 
-# @cache
-# def possibleStates(state):
-#     match state.index(0):
-#         case 0:
-#             return [
-#                 swap(state, 0, 1),
-#                 swap(state, 0, 3)
-#             ]
-#         case 1:
-#             return [
-#                 swap(state, 1, 0),
-#                 swap(state, 1, 2),
-#                 swap(state, 1, 4)
-#             ]
-#         case 2:
-#             return [
-#                 swap(state, 2, 1),
-#                 swap(state, 2, 5)
-#             ]
-#         case 3:
-#             return [
-#                 swap(state, 3, 0),
-#                 swap(state, 3, 4),
-#                 swap(state, 3, 6)
-#             ]
-#         case 4:
-#             return [
-#                 swap(state, 4, 1),
-#                 swap(state, 4, 3),
-#                 swap(state, 4, 5),
-#                 swap(state, 4, 7)
-#             ]
-#         case 5:
-#             return [
-#                 swap(state, 5, 2),
-#                 swap(state, 5, 4),
-#                 swap(state, 5, 8)
-#             ]
-#         case 6:
-#             return [
-#                 swap(state, 6, 3),
-#                 swap(state, 6, 7)
-#             ]
-#         case 7:
-#             return [
-#                 swap(state, 7, 4),
-#                 swap(state, 7, 6),
-#                 swap(state, 7, 8)
-#             ]
-#         case 8:
-#             return [
-#                 swap(state, 8, 5),
-#                 swap(state, 8, 7)
-#             ]
 def possibleStates(state):
     i = state.index(0)
     return [swap(state, i, j) for j in neighbours[i]]
@@ -117,8 +76,8 @@ def possibleStates(state):
 @cache
 def inversionCount(state):
     invCount = 0
-    for i in range(9):
-        for j in range(i + 1, 9):
+    for i in range(16):
+        for j in range(i + 1, 16):
             if state[i] != 0 and state[j] != 0 and state[i] > state[j]:
                 invCount += 1
     return invCount
@@ -137,21 +96,21 @@ def manhattan(i, j):
     3 4 5
     6 7 8
     """
-    return abs((i % 3) - (j % 3)) + abs((i // 3) - (j // 3))
+    return abs((i % 4) - (j % 4)) + abs((i // 4) - (j // 4))
     # dx = abs((i % 3) + (j % 3))
     # dy = abs((i // 3) + (j // 3))
     # return dx + dy
 
-# @cache
-# def heuristic(current, goal):
-#     score = 0
-#     for i in range(9):
-#         score += manhattan(current.index(i), goal.index(i))
-#     return score
-
 @cache
 def heuristic(current, goal):
-    return abs(inversionCount(current) - inversionCount(goal))
+    score = 0
+    for i in range(9):
+        score += manhattan(current.index(i), goal.index(i))
+    return score
+
+# @cache
+# def heuristic(current, goal):
+#     return abs(inversionCount(current) - inversionCount(goal))
 
 # def heuristic(current, goal):
 #     return 0
@@ -163,15 +122,17 @@ def insert(sLst, s):
     return sLst + [s]
 
 def printState(state):
-    output = " "
-    for i in range(9):
+    output = ""
+    for i in range(16):
         if state[i] == 0:
-            output += " "
+            output += "  "
+        elif state[i] < 10:
+            output += " " + str(state[i])
         else:
             output += str(state[i])
 
-        if i == 2 or i == 5:
-            output += "\n "
+        if i % 4 == 3:
+            output += "\n"
         else:
             output += " "
         
