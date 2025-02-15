@@ -142,16 +142,16 @@ def manhattan(i, j):
     # dy = abs((i // 3) + (j // 3))
     # return dx + dy
 
-# @cache
-# def heuristic(current, goal):
-#     score = 0
-#     for i in range(9):
-#         score += manhattan(current.index(i), goal.index(i))
-#     return score
-
 @cache
 def heuristic(current, goal):
-    return abs(inversionCount(current) - inversionCount(goal))
+    score = 0
+    for i in range(9):
+        score += manhattan(current.index(i), goal.index(i))
+    return score
+
+# @cache
+# def heuristic(current, goal):
+#     return abs(inversionCount(current) - inversionCount(goal))
 
 # def heuristic(current, goal):
 #     return 0
