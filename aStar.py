@@ -163,7 +163,7 @@ def insert(sLst, s):
     return sLst + [s]
 
 def printState(state):
-    output = " "
+    output = ""
     for i in range(9):
         if state[i] == 0:
             output += " "
@@ -171,7 +171,7 @@ def printState(state):
             output += str(state[i])
 
         if i == 2 or i == 5:
-            output += "\n "
+            output += "\n"
         else:
             output += " "
         
